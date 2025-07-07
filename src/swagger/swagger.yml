@@ -1,0 +1,252 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API para ONGs - Registro de Incidentes",
+    "version": "1.0.0",
+    "description": "API para cadastro de ONGs, autenticao via JWT e registro de incidentes"
+  },
+  "paths": {
+    "/ongs": {
+      "get": {
+        "summary": "Listar todas as ONGs",
+        "responses": {
+          "200": {
+            "description": "Lista de ONGs"
+          }
+        }
+      },
+      "post": {
+        "summary": "Cadastrar uma nova ONG",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "whatsapp": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "uf": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name",
+                  "email",
+                  "password",
+                  "whatsapp",
+                  "city",
+                  "uf"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "ONG criada com sucesso"
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "summary": "Login da ONG (gera token JWT)",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "email",
+                  "password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Token JWT gerado com sucesso"
+          },
+          "401": {
+            "description": "Credenciais inv\u00e1lidas"
+          }
+        }
+      }
+    },
+    "/incidents": {
+      "get": {
+        "summary": "Listar todos os incidentes",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de incidentes"
+          },
+          "401": {
+            "description": "Token inv\u00e1lido ou ausente"
+          }
+        }
+      },
+      "post": {
+        "summary": "Criar um novo incidente",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "title",
+                  "description",
+                  "value",
+                  "category"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Incidente criado com sucesso"
+          },
+          "401": {
+            "description": "Token inv\u00e1lido ou ausente"
+          }
+        }
+      }
+    },
+    "/incidents/{id}": {
+      "put": {
+        "summary": "Atualizar um incidente existente",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "number"
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Incidente atualizado com sucesso"
+          },
+          "401": {
+            "description": "Token inv\u00e1lido ou ausente"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Deletar um incidente",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Incidente deletado com sucesso"
+          },
+          "401": {
+            "description": "Token inv\u00e1lido ou ausente"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
